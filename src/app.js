@@ -1,14 +1,14 @@
+require("dotenv").config();
 const express = require("express");
 const connectDB = require("./config/db");
 const app = express();
 const http = require("http");
-const User = require("./models/userModel");
 const authRouter = require("./routes/Auth");
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
 const chatRouter = require("./routes/chat");
-require("dotenv").config();
+const PORT = process.env.PORT || 5000;
 
 var cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -26,12 +26,10 @@ app.use("/", chatRouter);
 const server = http.createServer(app);
 initializeSocket(server);
 
-console.log(process.env.PORT);
 connectDB()
   .then(() => {
     server.listen(PORT, () => console.log("app is running on", PORT));
   })
   .catch((err) => {
-    console.error("database not connected");
+    console.error("database not connected",err);
   });
-const PORT = process.env.PORT || 5000;
