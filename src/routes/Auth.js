@@ -21,6 +21,10 @@ authRouter.post("/signup", async (req, res) => {
     await user.save();
     res.status(201).send("User added successfully");
   } catch (error) {
+    console.log(error);
+    if (error.code === 11000 && error.keyPattern?.email) {
+      return res.status(400).json("Email is already registered.");
+    }
     res.status(500).json(error.message);
   }
 });
@@ -40,11 +44,11 @@ authRouter.post("/login", async (req, res) => {
     if (isPasswordValid) {
       const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
 
-      res.cookie('token', token, {
+      res.cookie("token", token, {
         httpOnly: true,
-        secure: true, 
-        sameSite: 'none', 
-        maxAge: 7 * 24 * 60 * 60 * 1000 
+        secure: true,
+        sameSite: "none",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       });
       res.status(200).json({ message: "Login successfully", data: user });
     } else {

@@ -33,3 +33,4 @@ connectDB()
   .catch((err) => {
     console.error("database not connected",err);
   });
+

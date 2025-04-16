@@ -6,10 +6,12 @@ const userSchema = new mongoose.Schema(
     firstName: {
       type: String,
       required: true,
+      minlength: 3,
     },
     lastName: {
       type: String,
       required: true,
+      
     },
     email: {
       type: String,
@@ -45,6 +47,9 @@ const userSchema = new mongoose.Schema(
     },
     bio: {
       type: String,
+      default: "This user has not added a bio yet.",
+      trim: true,
+      maxlength: 200,
     },
     yearOfExperience: {
       type: String,
