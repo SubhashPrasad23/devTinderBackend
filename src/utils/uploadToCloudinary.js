@@ -15,7 +15,7 @@ const uploadToCloudinary = async (filePath, folder = "profiles") => {
       folder,
       resource_type: "auto",
     });
-    fs.unlinkSync(filePath); // Delete local file after upload
+    fs.unlinkSync(filePath); 
     return result.secure_url;
   } catch (err) {
     fs.unlinkSync(filePath);
