@@ -21,7 +21,6 @@ authRouter.post("/signup", async (req, res) => {
     await user.save();
     res.status(201).send("User added successfully");
   } catch (error) {
-    console.log(error);
     if (error.code === 11000 && error.keyPattern?.email) {
       return res.status(400).json("Email is already registered.");
     }

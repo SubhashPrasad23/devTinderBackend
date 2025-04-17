@@ -6,7 +6,6 @@ const User = require("../models/userModel");
 const upload = require("../middlewares/upload");
 const uploadToCloudinary = require("../utils/uploadToCloudinary");
 
-
 profileRouter.get("/profile/view", userAuth, (req, res) => {
   try {
     res.json({ message: "User fetch sucessfully", data: req.user });
@@ -21,29 +20,29 @@ profileRouter.post(
   upload.single("photoURL"),
   async (req, res) => {
     try {
-      console.log(req.body)
       if (!validateEditProfile(req)) {
-        throw new Error("Invalid edit request");
+        return res.status(400).json({ error: "Invalid edit request" });
       }
-      const loggedInUser = req.user;
 
+      const loggedInUser = req.user;
 
       if (req.file) {
         const profileUrl = await uploadToCloudinary(req.file.path);
         loggedInUser.photoURL = profileUrl;
       }
 
-      Object.keys(req.body).forEach(
-        (key) => (loggedInUser[key] = req.body[key])
-      );
+      Object.keys(req.body).forEach((key) => {
+        loggedInUser[key] = req.body[key];
+      });
 
       await loggedInUser.save();
+
       res.json({
         message: "Your profile updated successfully",
         data: loggedInUser,
       });
     } catch (error) {
-      res.status(400).send("ERROR : " + error.message);
+      res.status(500).json({ error: error });
     }
   }
 );

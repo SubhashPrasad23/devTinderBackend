@@ -11,7 +11,6 @@ const userSchema = new mongoose.Schema(
     lastName: {
       type: String,
       required: true,
-      
     },
     email: {
       type: String,
@@ -44,20 +43,27 @@ const userSchema = new mongoose.Schema(
     },
     skills: {
       type: [String],
+      validate: {
+        validator: function (value) {
+          return value.length <= 10;
+        },
+        message: "You can add up to 10 skills only.",
+      },
     },
+
     bio: {
       type: String,
       default: "This user has not added a bio yet.",
       trim: true,
-      maxlength: 200,
+      maxlength: [150, "Bio cannot be more than 150 characters."],
     },
     yearOfExperience: {
       type: String,
     },
-    photoURL:{
+    photoURL: {
       type: String,
       default: "",
-    }
+    },
   },
   {
     timestamps: true,
